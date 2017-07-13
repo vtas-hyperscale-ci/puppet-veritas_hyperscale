@@ -7,7 +7,7 @@
   "source": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale.git",
   "project_page": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale",
   "issues_url": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale/issues",
-  "description": "Installs and configures Veritas Hyperscale (Controller)."
+  "description": "Installs and configures Veritas Hyperscale (Controller).",
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">4.14.0"},
     {"name":"puppetlabs/rabbitmq","version_requirement":">5.6.0"},
