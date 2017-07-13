@@ -7,16 +7,14 @@
   "source": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale.git",
   "project_page": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale",
   "issues_url": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale/issues",
+  "description": "Installs and configures Veritas Hyperscale (Controller)."
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
-    {"name":"crudini","version_requirement":">= 0.7"},
-    {"name":"python-amqp","version_requirement":">= 1.4.6"},
-    {"name":"python-kombu","version_requirement":">= 3.0.32"},
-    {"name":"python-kazoo","version_requirement":">= 2.2.1"},
-    {"name":"python-sqlalchemy","version_requirement":">= 1.0.11"},
-    {"name":"lvm2","version_requirement":">= 2.02.166"},
-    {"name":"coreutils","version_requirement":">= 8.22"},
-    {"name":"python-anyjson","version_requirement":">= 0.3.3"}
+    {"name":"puppetlabs/stdlib","version_requirement":">4.14.0"},
+    {"name":"puppetlabs/rabbitmq","version_requirement":">5.6.0"},
+    {"name":"openstack/keystone","version_requirement":">10.3.0"},
+    {"name":"openstack/nova","version_requirement":">10.4.0"},
+    {"name":"openstack/cinder","version_requirement":">10.3.0"},
+    {"name":"openstack/openstacklib","version_requirement":">10.4.0"}
   ],
   "operatingsystem_support": [
     {
