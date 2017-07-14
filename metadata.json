@@ -1,9 +1,9 @@
 {
   "name": "veritas_hyperscale",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>",
   "summary": "Veritas HyperScale installer.",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale.git",
   "project_page": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale",
   "issues_url": "https://github.com/vtas-hyperscale-ci/puppet-veritas_hyperscale/issues",
