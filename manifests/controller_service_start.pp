@@ -1,18 +1,13 @@
 # == Class: controller_service_start
 #
-# === Variables
-#
 # === Example
+#  class {'veritas_hyperscale::controller_service_start':
+#  }
 #
-#   class {'veritas_hyperscale::controller_service_start':
-#   }
-#
-# === Authors
-#
+# === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
 # === Copyright
-#
 # Copyright (c) 2017 Veritas Technologies LLC.
 #
 
