@@ -1,9 +1,10 @@
 # == Class: hs_keystone
 #
-# === Authors
+# === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
 # === Copyright
+#
 # Copyright (c) 2017 Veritas Technologies LLC.
 #
 class  veritas_hyperscale::hs_keystone (
@@ -15,12 +16,19 @@ class  veritas_hyperscale::hs_keystone (
 
   $keystone_ip = hiera('keystone_admin_api_vip', false)
 
+  $keystone_pass = hiera('vrts_keystone_pass', '')
+  if $keystone_pass == '' {
+    $password = 'elacsrepyh'
+  } else {
+    $password = $keystone_pass
+  }
+
   if ($keystone_ip) {
     keystone_user { 'hyperscale':
       ensure   => present,
       enabled  => true,
       email    => 'hyperscale@localhost',
-      password => hiera('vrts_keystone_pass', 'elacsrepyh'),
+      password => $password,
     }
 
     keystone_user_role { 'hyperscale@service':
@@ -31,7 +39,7 @@ class  veritas_hyperscale::hs_keystone (
     keystone_user { '_proxy_':
       ensure   => present,
       enabled  => true,
-      password => hiera('vrts_keystone_pass', 'elacsrepyh'),
+      password => $password,
     }
 
     keystone_user_role { '_proxy_@admin':
@@ -43,8 +51,6 @@ class  veritas_hyperscale::hs_keystone (
       ensure => present,
     }
 
-# FIXME Changing admin characteristics gives error.
-# Document this manual step as we are developing new GUI anyway.
 #   Changing admin user characteristics is not working.
 #    keystone_user_role { 'admin@admin':
 #      #ensure => present,
@@ -52,7 +58,7 @@ class  veritas_hyperscale::hs_keystone (
 #    }
 #
 #require => Class['::keystone::roles::admin']
-#
+
     keystone_service { 'hyperscale':
       ensure      => present,
       name        => 'hyperscale',

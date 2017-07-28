@@ -5,8 +5,8 @@
 #
 # === Parameters
 #
-# [*password*]
-#   password to connect to the database. Mandatory.
+# [*mysql_pass*]
+#   Password to connect to the database.
 #
 # [*dbname*]
 #   "HyperScale"
@@ -15,30 +15,50 @@
 #   "hyperscale"
 #
 # [*host*]
-#   the default source host user is allowed to connect from.
+#   The default source host user is allowed to connect from.
 #   Optional. Defaults to 'localhost'
 #
+# [*mysql_vip*]
+#   The IP of mysql component.
+#
+# [*mysql_bind_host*]
+#   Defaults to hiera('mysql_bind_host').
+#
 # [*allowed_hosts*]
-#   other hosts the user is allowd to connect from.
+#   Other hosts the user is allowd to connect from.
 #   Optional. Defaults to undef.
 #
 # [*charset*]
-#   the database charset. Optional. Defaults to 'utf8'
+#   The database charset. Optional. Defaults to 'utf8'
 #
 # [*collate*]
-#   the database collation. Optional. Defaults to 'utf8_general_ci'
+#   The database collation. Optional. Defaults to 'utf8_general_ci'
+#
+# === Author
+# Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
+#
+# === Copyright
+# Copyright (c) 2017 Veritas Technologies LLC.
 #
 class veritas_hyperscale::db::mysql (
-  $password      = 'elacsrepyh',
-  $dbname        = 'HyperScale',
-  $user          = 'hyperscale',
-  $host          = '127.0.0.1',
-  $allowed_hosts = undef,
-  $charset       = 'utf8',
-  $collate       = 'utf8_general_ci',
+  $mysql_pass      = hiera('vrts_mysql_passwd', ''),
+  $dbname          = 'HyperScale',
+  $user            = 'hyperscale',
+  $host            = '127.0.0.1',
+  $mysql_vip       = hiera('mysql_vip', hiera('controller_virtual_ip')),
+  $mysql_bind_host = hiera('mysql_bind_host'),
+  $allowed_hosts   = ['localhost', '%', "$mysql_vip", "$mysql_bind_host"],
+  $charset         = 'utf8',
+  $collate         = 'utf8_general_ci',
 ) {
 
   include ::openstacklib::defaults
+
+  if $mysql_pass == '' {
+    $password = 'elacsrepyh'
+  } else {
+    $password = $mysql_pass
+  }
 
   ::openstacklib::db::mysql { 'HyperScale':
     user          => $user,
@@ -50,39 +70,69 @@ class veritas_hyperscale::db::mysql (
     allowed_hosts => $allowed_hosts,
   }
 
-  $mysql_cmd = "/usr/bin/mysql --user=${user} --password=${password} --host=${host} < "
-
-  # FIXME the following execs
-
-  exec {'sql1':
-    before  => Exec['sql2'],
-    path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/01_HyperScale.sql",
-    #environment => [],
+  mysql_grant { "hyperscale@localhost/nova.*":
+    privileges => 'ALL',
+    table      => 'nova.*',
+    require    => Mysql_user["hyperscale@localhost"],
+    user       => "hyperscale@localhost",
   }
 
-  exec {'sql2':
-    before  => Exec['sql3'],
-    path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/02_HyperScaleStatsSchema.sql",
-    #environment => [],
+  mysql_grant { "hyperscale@localhost/cinder.*":
+    privileges => 'ALL',
+    table      => 'cinder.*',
+    require    => Mysql_user["hyperscale@localhost"],
+    user       => "hyperscale@localhost",
   }
 
-  exec {'sql3':
-    before  => Exec['sql4'],
-    path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/03_HyperScaleWorkflow.sql",
-    #environment => [],
+  mysql_grant { "hyperscale@%/nova.*":
+    privileges => 'ALL',
+    table      => 'nova.*',
+    require    => Mysql_user["hyperscale@%"],
+    user       => "hyperscale@%",
   }
 
-  exec {'sql4':
-    path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/51_HyperScaleAlertsDescription.sql",
-    #environment => [],
+  mysql_grant { "hyperscale@%/cinder.*":
+    privileges => 'ALL',
+    table      => 'cinder.*',
+    require    => Mysql_user["hyperscale@%"],
+    user       => "hyperscale@%",
   }
 
+  if $mysql_vip != '' {
+    mysql_grant { "hyperscale@$mysql_vip/nova.*":
+      privileges => 'ALL',
+      table      => 'nova.*',
+      require    => Mysql_user["hyperscale@$mysql_vip"],
+      user       => "hyperscale@$mysql_vip",
+    }
+
+    mysql_grant { "hyperscale@$mysql_vip/cinder.*":
+      privileges => 'ALL',
+      table      => 'cinder.*',
+      require    => Mysql_user["hyperscale@$mysql_vip"],
+      user       => "hyperscale@$mysql_vip",
+    }
+  }
+
+  if $mysql_bind_host != '' {
+    mysql_grant { "hyperscale@$mysql_bind_host/nova.*":
+      privileges => 'ALL',
+      table      => 'nova.*',
+      require    => Mysql_user["hyperscale@$mysql_bind_host"],
+      user       => "hyperscale@$mysql_bind_host",
+    }
+
+    mysql_grant { "hyperscale@$mysql_bind_host/cinder.*":
+      privileges => 'ALL',
+      table      => 'cinder.*',
+      require    => Mysql_user["hyperscale@$mysql_bind_host"],
+      user       => "hyperscale@$mysql_bind_host",
+    }
+  }
+
+  class {'veritas_hyperscale::db::schema' :
+    user     => $user,
+    password => $password,
+    dbname   => $dbname,
+  }
 }

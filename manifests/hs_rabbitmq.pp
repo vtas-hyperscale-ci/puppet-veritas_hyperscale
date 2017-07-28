@@ -1,6 +1,6 @@
 # == Class: hs_rabbitmq
 #
-# === Authors
+# === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
 # === Copyright
@@ -11,10 +11,17 @@ class  veritas_hyperscale::hs_rabbitmq (
 {
   require veritas_hyperscale
 
-# ===Ocata
+  $rabbit_pass = hiera('vrts_rabbitmq_pass', '')
+  if $rabbit_pass == '' {
+    $password = 'elacsrepyh'
+  } else {
+    $password = $rabbit_pass
+  }
+
+# === Ocata
   rabbitmq_user { 'hyperscale':
     admin    => true,
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     provider => 'rabbitmqctl',
   }
 
@@ -28,10 +35,10 @@ class  veritas_hyperscale::hs_rabbitmq (
     provider => 'rabbitmqctl',
   }
 
-# ===Master
+# === Master
 #  ::openstacklib::messaging::rabbitmq {'vrts_hyperscale':
 #    userid   => 'hyperscale',
-#    password => 'elacsrepyh',
+#    password => $password,
 #    configure_permission => '.*',
 #    write_permission     => '.*',
 #    read_permission      => '.*',
@@ -46,53 +53,53 @@ class  veritas_hyperscale::hs_rabbitmq (
 #   provider => 'rabbitmqctl',
 #  }
 
-  # The rabbitmq_exchange also uses rabiitmqadmin
+  # FIXME The rabbitmq_exchange also uses rabiitmqadmin
   # script just like hs_rabbitmq.sh
   rabbitmq_exchange { 'hyperscale-controller@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-stats@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-datanode@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-recv@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-storage@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-compute-hy@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }
 
   rabbitmq_exchange { 'hyperscale-datanode-hypervisor@/':
     user     => 'hyperscale',
-    password => hiera('vrts_rabbitmq_pass', 'elacsrepyh'),
+    password => $password,
     type     => 'direct',
     durable  => true,
   }

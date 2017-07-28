@@ -1,3 +1,8 @@
+/*
+ *  $Copyright: Copyright (c) 2017 Veritas Technologies LLC.
+ *  All rights reserved.
+ */
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
