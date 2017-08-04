@@ -19,6 +19,7 @@ class veritas_hyperscale::controller_pkg_inst (
 )inherits veritas_hyperscale
 {
   require veritas_hyperscale
+  require veritas_hyperscale::vrts_hs_repo
 
   file { '/tmp/install_pkgs':
     ensure  => 'present',
@@ -26,26 +27,21 @@ class veritas_hyperscale::controller_pkg_inst (
     path    => '/tmp/install_pkgs',
   }
 
-  $path = "/tmp/veritas_hyperscale"
-  $op = "installed"
+  $op = "latest"
 
   package { 'VRTSofcore':
     ensure   => $op,
-    provider => 'rpm',
-    source   => "${path}/packages/VRTSofcore-1.1.0.000-RHEL7.x86_64.rpm",
+    require => Yumrepo['HyperScale'],
   }
 
   package { 'VRTSofmn':
     ensure   => $op,
-    provider => 'rpm',
-    source   => "${path}/packages/VRTSofmn-1.1.0.000-RHEL7.x86_64.rpm",
-    require  => Package["VRTSofcore"],
+    require  => [ Package["VRTSofcore"], Yumrepo['HyperScale']],
   }
 
   package { 'VRTSofspt':
     ensure   => $op,
-    provider => 'rpm',
-    source   => "${path}/packages/VRTSofspt_1.0.0.100-RHEL7.x86_64.rpm",
+    require => Yumrepo['HyperScale'],
   }
 
   if $step >=4 {
