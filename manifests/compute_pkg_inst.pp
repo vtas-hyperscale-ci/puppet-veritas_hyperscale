@@ -1,61 +1,77 @@
+# == Class: compute_pkg_inst
+#
 # === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
 # === Copyright
 # Copyright (c) 2017 Veritas Technologies LLC.
 #
-class compute_pkg_inst {
-	package { 'vrtsofcore':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofcore-1.1.0.000-RHEL7.x86_64.rpm',
-		}
 
-	package { 'vrtsofcn':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofcn-1.1.0.000-RHEL7.x86_64.rpm',
-		}
+# NOTE: This is place holder class and not used currently.
 
-	package { 'vrtsofspt':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofspt_1.1.0.000-RHEL7.x86_64.rpm',
-		}
+class veritas_hyperscale::compute_pkg_inst (
+)inherits veritas_hyperscale
+{
+  require veritas_hyperscale
 
-	package { 'vrtsperl':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSperl-5.24.0.1-RHEL7.x86_64',
-		}
+  file { '/tmp/install_pkgs':
+    ensure  => 'present',
+    content => 'test',
+    path    => '/tmp/install_pkgs',
+  }
 
-	package { 'vrtsveki':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSveki-7.3.0.000-RHEL7.x86_64',
-		}
+  $path = "/tmp/veritas_hyperscale"
+  $op = "latest"
 
-	package { 'vrtsvlic':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSvlic-3.02.71.004-RHEL7.x86_64',
-		}
+  package { 'VRTSofcore':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofcore*",
+  }
 
-	package { 'vrtsvxvm':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSvxvm-7.3.0.000-RHEL7.x86_64',
-		}
+  package { 'VRTSofcn':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofcn*",
+    require  => Package["VRTSofcore"],
+  }
 
-	package { 'vrtsaslapm':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSaslapm-7.3.0.000-RHEL7.x86_64',
-		}
+  package { 'VRTSofspt':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofspt*",
+  }
 
-	package { 'compute-ceilometer':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/compute-ceilometer.rpm',
-		}
+  package { 'VRTSperl':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSperl*",
+  }
+
+  package { 'VRTSvlic':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSvlic*",
+  }
+
+  package { 'VRTSveki':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSveki*",
+  }
+
+  package { 'VRTSvxvm':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSvxvm*",
+  }
+
+  package { 'VRTSaslapm':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSaslapm*",
+  }
+
+ include veritas_hyperscale::compute_service_start
+
 }

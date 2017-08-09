@@ -1,67 +1,88 @@
+# == Class: datanode_pkg_inst
+#
 # === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
 # === Copyright
 # Copyright (c) 2017 Veritas Technologies LLC.
-#
-class datanode_pkg_inst {
-	package { 'vrtsofcore':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofcore-1.1.0.000-RHEL7.x86_64.rpm',
-		}
 
-	package { 'vrtsofdn':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofdn-1.0.0.000-RHEL7.x86_64',
-		}
 
-	package { 'vrtsofmn':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofmn-1.0.0.000-RHEL7.x86_64',
-		require  => Package["vrtsofcore"],
-		}
+# NOTE: This is place holder class and not used currently.
 
-	package { 'vrtsofspt':
-		ensure   => installed,
-		provider => 'rpm',
-		source   => 'puppet:///modules/veritas_hyperscale/VRTSofspt-1.0.0.000-RHEL7.x86_64',
-		}
+class veritas_hyperscale::compute_pkg_inst (
+)inherits veritas_hyperscale
+{
+  require veritas_hyperscale
 
-	package { 'python-amqp':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  file { '/tmp/install_pkgs':
+    ensure  => 'present',
+    content => 'test',
+    path    => '/tmp/install_pkgs',
+  }
 
-	package { 'python-kombu':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  $path = "/tmp/veritas_hyperscale"
+  $op = "latest"
 
-	package { 'python-kazoo':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  package { 'VRTSofcore':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofcore*",
+  }
 
-	package { 'python-anyjson':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  package { 'VRTSofdn':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofdn*",
+    require  => Package["VRTSofcore"],
+  }
 
-	package { 'python-sqlalchemy':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  package { 'VRTSofmn':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofmn*",
+    require  => Package["VRTSofcore"],
 
-	package { 'lvm2':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  package { 'VRTSofspt':
+    ensure   => $op,
+    provider => 'rpm',
+    source   => "${path}/packages/VRTSofspt*",
+  }
 
-	package { 'coreutils':
-		ensure   => installed,
-		provider => 'yum',
-		}
+  package { 'python-amqp':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'python-kombu':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'python-kazoo':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'python-anyjson':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'python-sqlalchemy':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'lvm2':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+  package { 'coreutils':
+    ensure   => $op,
+    provider => 'yum',
+  }
+
+ include veritas_hyperscale::datanode_service_start
+
 }
