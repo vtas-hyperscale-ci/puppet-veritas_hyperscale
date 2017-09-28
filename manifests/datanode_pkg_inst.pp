@@ -9,7 +9,7 @@
 
 # NOTE: This is place holder class and not used currently.
 
-class veritas_hyperscale::compute_pkg_inst (
+class veritas_hyperscale::datanode_pkg_inst (
 )inherits veritas_hyperscale
 {
   require veritas_hyperscale

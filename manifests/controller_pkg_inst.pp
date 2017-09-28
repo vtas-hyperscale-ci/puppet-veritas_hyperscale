@@ -49,6 +49,7 @@ class veritas_hyperscale::controller_pkg_inst (
   }
 
   if $step >=4 {
+    include veritas_hyperscale::controller_save_conf
     include veritas_hyperscale::controller_service_start
   }
 }

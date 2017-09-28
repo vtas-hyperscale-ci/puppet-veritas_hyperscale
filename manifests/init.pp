@@ -1,5 +1,7 @@
 # == Class: hyperscale
 #
+# === Parameters
+#
 # === Author
 # Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
 #
