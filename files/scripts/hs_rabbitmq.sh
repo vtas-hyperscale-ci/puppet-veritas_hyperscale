@@ -8,7 +8,7 @@
 
 # FIXME This script is not required now. Delete it.
 
-IDEMPOTENT="/var/opt/VRTSofcore/.vrts_rabbitmq_configured"
+IDEMPOTENT="/tmp/.hs_mq_configured"
 if [ -f $IDEMPOTENT ]
 then
     exit 0
@@ -18,13 +18,13 @@ touch $IDEMPOTENT
 # TODO : command exit status.
 CMD_RABBITMQA_PLUGIN=/usr/lib/rabbitmq/bin/rabbitmq-plugins
 CMD_RABBITMQCTL=/usr/sbin/rabbitmqctl
-CMD_RABBITMQADMIN=/opt/VRTSofcore/adm/rabbitmqadmin
+CMD_RABBITMQADMIN=/etc/puppet/modules/veritas_hyperscale/files/scripts/rabbitmqadmin
 
 # Enable "rabbitmq_management" plugin.
-$CMD_RABBITMQA_PLUGIN enable rabbitmq_management
+#$CMD_RABBITMQA_PLUGIN enable rabbitmq_management
 
 # Add user tags
-$CMD_RABBITMQCTL set_user_tags hypescale management
+$CMD_RABBITMQCTL set_user_tags hyperscale management
 
 #TODO: check file and add hyperscale spefic configuration to rabbitmq-env.conf.
 #ls /etc/rabbitmq/rabbitmq-env.conf

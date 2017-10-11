@@ -10,8 +10,8 @@
 class veritas_hyperscale::controller_save_conf (
 )inherits veritas_hyperscale
 {
-  #include veritas_hyperscale::config_dumper
-  include veritas_hyperscale::rabbitmq_save_conf
-  #include veritas_hyperscale::nova_save_conf
+  require veritas_hyperscale::db::mysql
 
+  include veritas_hyperscale::rabbitmq_save_conf
+  include veritas_hyperscale::config_dumper
 }

@@ -135,10 +135,4 @@ class veritas_hyperscale::db::mysql (
     password => $password,
     dbname   => $dbname,
   }
-
-  class {'veritas_hyperscale::db::config_save' :
-    user     => $user,
-    password => $password,
-    dbname   => $dbname,
-  }
 }

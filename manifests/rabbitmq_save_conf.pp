@@ -18,9 +18,9 @@ class veritas_hyperscale::rabbitmq_save_conf (
     fail("Rabbitmq port not set.")
   }
 
-  $ctrl_ip = hiera('controller_virtual_ip', '')
+  $ctrl_ip = hiera('vrts_ctrl_mgmt_ip', '')
   if $ctrl_ip == '' {
-    fail("Contrller IP not set.")
+    fail("vrts_ctrl_mgmt_ip IP not set.")
   }
 
   $rabbit_pass = hiera('vrts_rabbitmq_pass', 'elacsrepyh')
@@ -29,6 +29,4 @@ class veritas_hyperscale::rabbitmq_save_conf (
     path   => '/usr/bin:/usr/sbin:/bin',
     command => "/bin/sed -i \"s|5672|$rabbit_port|g\" $amqp_conf_file && /bin/sed -i \"s|RABBITMQ_USER|hyperscale|g\" $amqp_conf_file && /bin/sed -i \"s|RABBITMQ_PASSWORD|$rabbit_pass|g\" $amqp_conf_file && /bin/sed -i \"s|MGMT_SERVER_IP|$ctrl_ip|g\" $amqp_conf_file",
   }
-
-  # Dump info to DB
 }
