@@ -1,0 +1,76 @@
+# == Class: veritas_hyperscale::db::config_save
+#
+# The veritas_hyperscale::db::config_save creates tables
+# in HyperScale databases.
+#
+# === Parameters
+#
+# [*password*]
+#   password to connect to the database. Mandatory.
+#
+# [*dbname*]
+#   "HyperScale"
+#
+# [*user*]
+#   "hyperscale"
+#
+# === Author
+# Veritas HyperScale CI <DL-VTAS-ENG-SDIO-HyperScale-Opensource@veritas.com>
+#
+# === Copyright
+# Copyright (c) 2017 Veritas Technologies LLC.
+#
+class veritas_hyperscale::db::config_save (
+  $password = $password,
+  $dbname   = $dbname,
+  $user     = $user,
+) {
+
+  include ::openstacklib::defaults
+  require veritas_hyperscale::db::schema
+
+  $mysql_cmd = "/usr/bin/mysql --user=${user} --password=${password} "
+
+  $ctrl_ip = hiera('controller_virtual_ip', '')
+  if $ctrl_ip == '' {
+    fail("Controller IP not set.")
+  }
+
+  exec {'ctrl_ip':
+    before  => Exec['admin_pass'],
+    path    => '/usr/bin:/usr/sbin:/bin',
+    command => "${mysql_cmd} INSERT INTO ${dbname}.hyperscale_config_metadata (host_ip, host_id, personality, config_key, config_value) VALUES ('NULL', 'NULL', 'CONTROLLER', 'HYPERVISOR_IP', ${ctrl_ip}) ON DUPLICATE KEY UPDATE host_ip='NULL', host_id='NULL', personality='CONTROLLER', config_key='HYPERVISOR_IP', config_value=${ctrl_ip}",
+  }
+
+  $admin_pass = hiera('keystone::admin_password', '')
+  if $admin_pass == '' {
+    fail("admin_password not set.")
+  }
+
+  exec {'admin_pass':
+    before  => Exec['mysql_vip'],
+    path    => '/usr/bin:/usr/sbin:/bin',
+    command => "${mysql_cmd} INSERT INTO ${dbname}.hyperscale_config_metadata (host_ip, host_id, personality, config_key, config_value) VALUES ('NULL', 'NULL', 'CONTROLLER', 'ADMIN_PASSWORD', ${admin_pass}) ON DUPLICATE KEY UPDATE host_ip='NULL', host_id='NULL', personality='CONTROLLER', config_key='ADMIN_PASSWORD', config_value=${admin_pass}",
+  }
+
+  $mysql_vip = hiera('mysql_vip', '')
+  if $mysql_vip == '' {
+    fail("mysql_vip not set.")
+  }
+
+  exec {'mysql_vip':
+    before  => Exec['rabbit_port'],
+    path    => '/usr/bin:/usr/sbin:/bin',
+    command => "${mysql_cmd} INSERT INTO ${dbname}.hyperscale_config_metadata (host_ip, host_id, personality, config_key, config_value) VALUES ('NULL', 'NULL', 'CONTROLLER', 'ADMIN_PASSWORD', ${mysql_vip}) ON DUPLICATE KEY UPDATE host_ip='NULL', host_id='NULL', personality='CONTROLLER', config_key='ADMIN_PASSWORD', config_value=${mysql_vip}",
+  }
+
+  $rabbit_port = hiera('rabbitmq::port', '')
+  if $rabbit_port == '' {
+    fail("Rabbitmq port not set.")
+  }
+
+  exec {'rabbit_port':
+    path    => '/usr/bin:/usr/sbin:/bin',
+    command => "${mysql_cmd} INSERT INTO ${dbname}.hyperscale_config_metadata (host_ip, host_id, personality, config_key, config_value) VALUES ('NULL', 'NULL', 'CONTROLLER', 'RABBITMQ_PORT', ${rabbit_port}) ON DUPLICATE KEY UPDATE host_ip='NULL', host_id='NULL', personality='CONTROLLER', config_key='RABBITMQ_PORT', config_value=${rabbit_port}",
+  }
+}

@@ -9,7 +9,7 @@
 
 # NOTE: This is place holder class and not used currently.
 
-class veritas_hyperscale::compute_pkg_inst (
+class veritas_hyperscale::datanode_pkg_inst (
 )inherits veritas_hyperscale
 {
   require veritas_hyperscale
@@ -41,6 +41,7 @@ class veritas_hyperscale::compute_pkg_inst (
     provider => 'rpm',
     source   => "${path}/packages/VRTSofmn*",
     require  => Package["VRTSofcore"],
+  }
 
   package { 'VRTSofspt':
     ensure   => $op,
@@ -48,41 +49,6 @@ class veritas_hyperscale::compute_pkg_inst (
     source   => "${path}/packages/VRTSofspt*",
   }
 
-  package { 'python-amqp':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'python-kombu':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'python-kazoo':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'python-anyjson':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'python-sqlalchemy':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'lvm2':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
-  package { 'coreutils':
-    ensure   => $op,
-    provider => 'yum',
-  }
-
- include veritas_hyperscale::datanode_service_start
+  include veritas_hyperscale::datanode_service_start
 
 }
