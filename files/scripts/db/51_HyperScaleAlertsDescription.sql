@@ -146,16 +146,64 @@ INSERT INTO `hyperscale_alerts_description` (
       'alert.vdisk.bst.failed', 'BST hydrate workflow failed for vdisk %(SOURCE)s');
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
-      'alert.vm.ssf.failed', 'SSF workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s');
+      'alert.vdisk.sm.failed', 'Storage migration workflow failed for vdisk %(SOURCE)s');
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
-      'alert.vm.smf.failed', 'SMF workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s');
+      'alert.vdisk.novaevac.failed', 'Nova evacuation workflow failed for vdisk %(SOURCE)s');
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
-      'alert.vm.ror.failed', 'RoR workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s');
+      'alert.cloud.ssf.failed', 'SSF workflow failed for compute %(ASSOC)s');
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
-      'alert.vm.bst.failed', 'BST hydrate workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s');
+      'alert.cloud.smf.failed', 'SMF workflow failed for compute %(ASSOC)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.ror.failed', 'RoR workflow failed for compute %(ASSOC)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.bst.failed', 'BST hydrate workflow failed for compute %(ASSOC)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.sm.failed', 'Storage migration workflow failed for compute %(ASSOC)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.novaevac.failed', 'Nova evacuation workflow failed for compute %(ASSOC)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.ssf.failed', 'SSF workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.smf.failed', 'SMF workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.ror.failed', 'RoR workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.bst.failed', 'BST hydrate workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.sm.failed', 'Storage migration workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.novaevac.failed', 'Nova evacuation workflow failed for VM %(ASSOC)s in compute %(SOURCE)s');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.sm.failed', 'Storage migration workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.novaevac.failed', 'Nova evacuation workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.ssf.failed', 'SSF workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.smf.failed', 'SMF workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.ror.failed', 'RoR workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.vm.bst.failed', 'BST hydrate workflow failed for vdisk %(ASSOC)s associated with instance %(SOURCE)s. Please do delta orchestration for the instance to secure your data.');
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
       'alert.compute.disk.removed', 'Disk %(ASSOC)s from Compute %(SOURCE)s is removed. Please live migrate any existing instances from this Compute and perform Disable and Enable operations to re-use this compute');
@@ -168,3 +216,15 @@ INSERT INTO `hyperscale_alerts_description` (
 INSERT INTO `hyperscale_alerts_description` (
       `topic`, `alert_text`) VALUES (
       'alert.compute.bst.succeeded', 'Live migrate instance %(ASSOC)s from compute %(SOURCE)s since storage daemon failed to come up');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.compute.hdd.highwatermark', 'HDD storage usage on %(SOURCE)s has reached a critical limit. To avoid a performance degradation, you may have to live migrate the instances to another compute that has sufficient storage.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.hdd.highwatermark', 'HDD storage usage on %(ASSOC)s has reached a critical limit. To avoid a performance degradation, you may have to live migrate the instances to another compute that has sufficient storage.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.dn.media.failed', 'Media failure on datanode %(SOURCE)s during datanode sync. Please remove and then add this datanode and do full sync after that.');
+INSERT INTO `hyperscale_alerts_description` (
+      `topic`, `alert_text`) VALUES (
+      'alert.cloud.media.failed', 'Media failure on datanode %(ASSOC)s during datanode sync. Please remove and then add this datanode and do full sync after that.');

@@ -16,7 +16,7 @@ class  veritas_hyperscale::hs_keystone (
 
   $keystone_ip = hiera('keystone_admin_api_vip', false)
 
-  $keystone_pass = hiera('vrts_keystone_pass', '')
+  $keystone_pass = hiera('keystone::admin_password', '')
   if $keystone_pass == '' {
     $password = 'elacsrepyh'
   } else {
