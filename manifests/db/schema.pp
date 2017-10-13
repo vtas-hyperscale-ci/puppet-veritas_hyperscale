@@ -30,35 +30,36 @@ class veritas_hyperscale::db::schema (
   require veritas_hyperscale::db::mysql
 
   $mysql_cmd = "/usr/bin/mysql --user=${user} --password=${password} < "
+  $script_path = "/etc/puppet/modules/veritas_hyperscale/files/scripts/db"
 
   exec {'sql1':
     before  => Exec['sql2'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/01_HyperScale.sql",
+    creates => "/var/tmp/vrts/.hs_schema_configured",
+    command => "${mysql_cmd} $script_path/01_HyperScale.sql",
   }
 
   exec {'sql2':
     before  => Exec['sql3'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/02_HyperScaleStatsSchema.sql",
+    creates => "/var/tmp/vrts/.hs_schema_configured",
+    command => "${mysql_cmd} $script_path/02_HyperScaleStatsSchema.sql",
   }
 
   exec {'sql3':
     before  => Exec['sql4'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/03_HyperScaleWorkflow.sql",
+    creates => "/var/tmp/vrts/.hs_schema_configured",
+    command => "${mysql_cmd} $script_path/03_HyperScaleWorkflow.sql",
   }
 
   exec {'sql4':
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/tmp/.hs_openstack_configured",
-    command => "${mysql_cmd} /tmp/veritas_hyperscale/scripts/db/51_HyperScaleAlertsDescription.sql",
-  } -> file {"/tmp/.hs_openstack_configured":
+    creates => "/var/tmp/vrts/.hs_schema_configured",
+    command => "${mysql_cmd} $script_path/51_HyperScaleAlertsDescription.sql",
+  } -> file {"/var/tmp/vrts/.hs_schema_configured":
     ensure  => 'present',
-    path    => "/tmp/.hs_openstack_configured",
+    path    => "/var/tmp/vrts/.hs_schema_configured",
     owner   => 'heat-admin',
     group   => 'heat-admin',
     mode    => '644',
