@@ -11,6 +11,7 @@ class veritas_hyperscale::controller_service_start (
 )inherits veritas_hyperscale
 {
   require veritas_hyperscale::controller_pkg_inst
+  require veritas_hyperscale::controller_save_conf
   require veritas_hyperscale::hs_keystone
   require veritas_hyperscale::hs_rabbitmq
   require veritas_hyperscale::db::mysql
