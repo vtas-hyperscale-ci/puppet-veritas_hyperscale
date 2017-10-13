@@ -32,6 +32,7 @@ class veritas_hyperscale::controller_pkg_inst (
   package { 'VRTSofmn':
     ensure   => $op,
     provider => 'rpm',
+    require  => Package["VRTSofcore"],
     source   => "${pkg_path}/VRTSofmn*",
   } ->
 
