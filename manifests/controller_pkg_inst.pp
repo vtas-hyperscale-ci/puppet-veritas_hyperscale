@@ -20,35 +20,37 @@ class veritas_hyperscale::controller_pkg_inst (
 {
   require veritas_hyperscale
 
-  file { '/tmp/install_pkgs':
-    ensure  => 'present',
-    content => 'test',
-    path    => '/tmp/install_pkgs',
-  }
-
-  $path = "/tmp/veritas_hyperscale"
   $op = "latest"
+  $pkg_path = "/etc/puppet/modules/veritas_hyperscale_packages/files"
 
   package { 'VRTSofcore':
     ensure   => $op,
     provider => 'rpm',
-    source   => "${path}/packages/VRTSofcore*",
-  }
+    source   => "${pkg_path}/VRTSofcore*",
+  } ->
 
   package { 'VRTSofmn':
     ensure   => $op,
     provider => 'rpm',
-    source   => "${path}/packages/VRTSofmn*",
     require  => Package["VRTSofcore"],
-  }
+    source   => "${pkg_path}/VRTSofmn*",
+  } ->
 
   package { 'VRTSofspt':
     ensure   => $op,
     provider => 'rpm',
-    source   => "${path}/packages/VRTSofspt*",
+    source   => "${pkg_path}/VRTSofspt*",
+  } ->
+
+  file {"/var/tmp/vrts/.hs_pkgs":
+    ensure  => 'present',
+    path    => "/var/tmp/vrts/.hs_pkgs",
+    owner   => 'heat-admin',
+    group   => 'heat-admin',
+    mode    => '644',
   }
 
   if $step >=4 {
-    include veritas_hyperscale::controller_service_start
+    include veritas_hyperscale::controller_save_conf
   }
 }

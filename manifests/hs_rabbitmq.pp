@@ -18,7 +18,6 @@ class  veritas_hyperscale::hs_rabbitmq (
     $password = $rabbit_pass
   }
 
-# === Ocata
   rabbitmq_user { 'hyperscale':
     admin    => true,
     password => $password,
@@ -31,6 +30,7 @@ class  veritas_hyperscale::hs_rabbitmq (
     read_permission      => '.*',
     provider             => 'rabbitmqctl',
   }
+
   rabbitmq_vhost { '/':
     provider => 'rabbitmqctl',
   }
@@ -49,58 +49,11 @@ class  veritas_hyperscale::hs_rabbitmq (
 #    read_permission      => '.*',
 #    provider             => 'rabbitmqctl',
 #  }
-#  rabbitmq_vhost { '/':
-#   provider => 'rabbitmqctl',
-#  }
 
-  # FIXME The rabbitmq_exchange also uses rabiitmqadmin
-  # script just like hs_rabbitmq.sh
-  rabbitmq_exchange { 'hyperscale-controller@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
+  service { 'rabbitmq-server':
+    ensure => running,
+    enable => true,
   }
 
-  rabbitmq_exchange { 'hyperscale-stats@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
-
-  rabbitmq_exchange { 'hyperscale-datanode@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
-
-  rabbitmq_exchange { 'hyperscale-recv@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
-
-  rabbitmq_exchange { 'hyperscale-storage@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
-
-  rabbitmq_exchange { 'hyperscale-compute-hy@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
-
-  rabbitmq_exchange { 'hyperscale-datanode-hypervisor@/':
-    user     => 'hyperscale',
-    password => $password,
-    type     => 'direct',
-    durable  => true,
-  }
+  include veritas_hyperscale::rabbitmq_management
 }

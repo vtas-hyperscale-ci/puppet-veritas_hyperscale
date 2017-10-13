@@ -11,6 +11,9 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+DROP DATABASE IF EXISTS `HyperScale`;
+
+CREATE DATABASE `HyperScale`;
 USE `HyperScale`;
 
 --
@@ -55,11 +58,13 @@ CREATE TABLE `hyperscale_nodes` (
   `data_ip` varchar(16) DEFAULT NULL,
   `personality` varchar(32),
   `status` varchar(32) DEFAULT 'up',
+  `substate` varchar(32) DEFAULT '-',
   `total_size` double DEFAULT NULL,
   `free_size` double DEFAULT NULL,
   `hypervisor_id` varchar(38) DEFAULT NULL,
   `rack_id` varchar(38) DEFAULT NULL,
-  `of_version` varchar(16) DEFAULT NULL,
+  `prod_version` varchar(16) DEFAULT NULL,
+  `proto_version` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`hostname`,`personality`),
   CONSTRAINT `hyperscale_nodes_fk_1` FOREIGN KEY (`rack_id`) REFERENCES `hyperscale_racks` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -103,7 +108,7 @@ CREATE TABLE `hyperscale_backups` (
   `object_id` varchar(36) NOT NULL,
   `project_id` varchar(36) NOT NULL,
   `object_json` text NOT NULL,
-  `backup_time` int(11) DEFAULT NULL,
+  `backup_time` varchar(50) DEFAULT NULL,
   `backup_size` BIGINT(20) DEFAULT NULL,
   `backup_status` varchar(255) DEFAULT NULL,
   `backup_type` varchar(16) NOT NULL,
@@ -248,6 +253,10 @@ CREATE TABLE `hyperscale_vendors` (
   `vendor_register_url` varchar(255) DEFAULT NULL,
   `vendor_unregister_url` varchar(255) DEFAULT NULL,
   `vendor_server_port` int(11) NOT NULL,
+  `dr_enabled` varchar(255) NOT NULL,
+  `public_IP` varchar(255) NOT NULL,
+  `prod_version` varchar(16) DEFAULT NULL,
+  `proto_version` varchar(16) DEFAULT NULL,
   `vendor_server_protocol` varchar(36) NOT NULL,
   `vendor_auth_type` varchar(36) NOT NULL,
   `vendor_auth_key` varchar(255) NOT NULL,
@@ -333,4 +342,26 @@ CREATE TABLE `hyperscale_policy_regex` (
   `deleted_at` datetime DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `hyperscale_certificates`
+--
+
+DROP TABLE IF EXISTS `hyperscale_certificates`;
+
+CREATE TABLE `hyperscale_certificates` (
+  `id` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT NULL,
+  `cert_type` ENUM('root', 'intermediate', 'server'),
+  `deployed_on` varchar(255) NOT NULL,
+  `deployment_path` varchar(1023) DEFAULT NULL,
+  `cert` text NOT NULL,
+  `private_key` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cert_hash` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
