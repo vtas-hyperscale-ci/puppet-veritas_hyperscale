@@ -20,17 +20,17 @@ class veritas_hyperscale::config_dumper (
     fail("admin_password not set.")
   }
 
-  $glance_ip = hiera('mysql_vip', '')
+  $glance_ip = hiera('glance_api_vip', '')
   if $glance_ip == '' {
     fail("glance_vip not set.")
   }
 
-  $ks_ip = hiera('mysql_vip', '')
+  $ks_ip = hiera('keystone_admin_api_vip', '')
   if $ks_ip == '' {
     fail("keystone_vip not set.")
   }
 
-  $rabbit_ip = hiera('mysql_vip', '')
+  $rabbit_ip = hiera('vrts_ctrl_mgmt_ip', '')
   if $rabbit_ip == '' {
     fail("rabbit_vip not set.")
   }
@@ -57,7 +57,7 @@ class veritas_hyperscale::config_dumper (
     fail("Keystone auth url for nova is not set.")
   }
 
-  $telemetry = hiera('telemetry_state', '')
+  $telemetry = hiera('VrtsConfigParam1', '')
   if $telemetry == '' {
     $telemetry_state = 'n'
   } else {
@@ -68,17 +68,17 @@ class veritas_hyperscale::config_dumper (
     before  => Exec['dump_conf'],
     path    => '/usr/bin:/usr/sbin:/bin',
     command => 'touch /var/opt/VRTSofcore/ofdb',
-    creates => "/var/tmp/vrts/hs_openstack_dump",
+    creates => "/var/tmp/vrts/.hs_openstack_dump",
   }
 
   exec {'dump_conf':
     path        => '/usr/bin:/usr/sbin:/bin',
     environment => ["_ZK_IP=$ctrl_ip"],
-    creates     => "/var/tmp/vrts/hs_openstack_dump",
+    creates     => "/var/tmp/vrts/.hs_openstack_dump",
     command     => "/opt/VRTSofcore/bin/ofexec --operation controller_conf_tripleo --run --params \"controller_ip=$ctrl_ip;mgmt_ip=$ctrl_ip;mysql_host=$mysql_ip;glance_host=$glance_ip;rabbit_host=$rabbit_ip;keystone_host=$ks_ip;openstack_passwd=$admin_passwd;mysql_user=hyperscale;mysql_hyperscale_password=$mysql_passwd;mysql_db=HyperScale;auth_url=$auth_url;telemetry_state=$telemetry_state\"",
-  } -> file {"/var/tmp/vrts/hs_openstack_dump":
+  } -> file {"/var/tmp/vrts/.hs_openstack_dump":
     ensure => 'present',
-    path   => "/var/tmp/vrts/hs_openstack_dump",
+    path   => "/var/tmp/vrts/.hs_openstack_dump",
     owner  => 'heat-admin',
     group  => 'heat-admin',
     mode   => '644',

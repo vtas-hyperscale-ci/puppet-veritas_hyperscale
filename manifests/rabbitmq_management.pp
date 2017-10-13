@@ -21,13 +21,13 @@ class  veritas_hyperscale::rabbitmq_management (
 
   exec {'exchanges':
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/var/tmp/vrts/hs_mq",
+    creates => "/var/tmp/vrts/.hs_mq",
     command => "sh /etc/puppet/modules/veritas_hyperscale/files/scripts/hs_rabbitmq.sh $password",
   } ->
 
-  file {"/var/tmp/vrts/hs_mq":
+  file {"/var/tmp/vrts/.hs_mq":
     ensure  => 'present',
-    path    => "/var/tmp/vrts/hs_mq",
+    path    => "/var/tmp/vrts/.hs_mq",
     owner   => 'heat-admin',
     group   => 'heat-admin',
     mode    => '644',

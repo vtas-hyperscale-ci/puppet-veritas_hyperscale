@@ -6,11 +6,9 @@
 # === Copyright
 # Copyright (c) 2017 Veritas Technologies LLC.
 
-# FIXME This script is not required now. Delete it.
-
 PASS=$1
 
-IDEMPOTENT="/var/tmp/vrts/hs_mq_configured"
+IDEMPOTENT="/var/tmp/vrts/.hs_mq_configured"
 if [ -f $IDEMPOTENT ]
 then
     exit 0
