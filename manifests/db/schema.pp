@@ -61,6 +61,13 @@ class veritas_hyperscale::db::schema (
   }
 
   exec {'sql5':
+    before  => Exec['sql6'],
+    path    => '/usr/bin:/usr/sbin:/bin',
+    creates => "/var/tmp/vrts/.hs_schema_configured",
+    command => "${mysql_cmd} $script_path/05_HyperScaleGroupSnapshots.sql",
+  }
+
+  exec {'sql6':
     path    => '/usr/bin:/usr/sbin:/bin',
     creates => "/var/tmp/vrts/.hs_schema_configured",
     command => "${mysql_cmd} $script_path/51_HyperScaleAlertsDescription.sql",

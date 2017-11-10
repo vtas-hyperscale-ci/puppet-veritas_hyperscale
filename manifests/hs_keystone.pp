@@ -66,6 +66,13 @@ class  veritas_hyperscale::hs_keystone (
       type        => 'infrastructure',
     }
 
+    keystone_service { 'cinderv3':
+      ensure      => present,
+      name        => 'cinderv3',
+      description => 'cinderv3',
+      type        => 'volumev3',
+    }
+
     keystone_endpoint { 'hyperscale':
       ensure       => present,
       type         => 'infrastructure',
@@ -73,6 +80,13 @@ class  veritas_hyperscale::hs_keystone (
       public_url   => "http://$keystone_ip:8753/v1/%(tenant_id)s",
       admin_url    => "http://$keystone_ip:8753/v1/%(tenant_id)s",
       internal_url => "http://$keystone_ip:8753/v1/%(tenant_id)s",
+    }
+
+    keystone_endpoint { 'cinderv3':
+      ensure       => present,
+      type         => 'cinderv3',
+      region       => 'RegionOne',
+      public_url   => "http://$keystone_ip:8776/v3/%(tenant_id)s",
     }
   }
 }
