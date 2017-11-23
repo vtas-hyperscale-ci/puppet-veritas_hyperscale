@@ -36,12 +36,6 @@ class veritas_hyperscale::controller_pkg_inst (
     source   => "${pkg_path}/VRTSofmn*",
   } ->
 
-  package { 'VRTSofspt':
-    ensure   => $op,
-    provider => 'rpm',
-    source   => "${pkg_path}/VRTSofspt*",
-  } ->
-
   file {"/var/tmp/vrts/.hs_pkgs":
     ensure  => 'present',
     path    => "/var/tmp/vrts/.hs_pkgs",
