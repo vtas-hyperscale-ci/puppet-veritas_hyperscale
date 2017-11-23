@@ -11,8 +11,6 @@ class  veritas_hyperscale (
 {
   file {"/var/tmp/vrts":
     ensure => 'directory',
-    owner  => 'heat-admin',
-    group  => 'heat-admin',
-    mode   => '644',
+    mode   => '777',
   }
 }

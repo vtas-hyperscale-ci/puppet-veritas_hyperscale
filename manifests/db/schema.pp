@@ -35,34 +35,24 @@ class veritas_hyperscale::db::schema (
   exec {'sql1':
     before  => Exec['sql2'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/var/tmp/vrts/.hs_schema_configured",
     command => "${mysql_cmd} $script_path/01_HyperScale.sql",
   }
 
   exec {'sql2':
     before  => Exec['sql3'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/var/tmp/vrts/.hs_schema_configured",
     command => "${mysql_cmd} $script_path/02_HyperScaleStatsSchema.sql",
   }
 
   exec {'sql3':
     before  => Exec['sql4'],
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/var/tmp/vrts/.hs_schema_configured",
     command => "${mysql_cmd} $script_path/03_HyperScaleWorkflow.sql",
   }
 
   exec {'sql4':
     path    => '/usr/bin:/usr/sbin:/bin',
-    creates => "/var/tmp/vrts/.hs_schema_configured",
     command => "${mysql_cmd} $script_path/51_HyperScaleAlertsDescription.sql",
-  } -> file {"/var/tmp/vrts/.hs_schema_configured":
-    ensure  => 'present',
-    path    => "/var/tmp/vrts/.hs_schema_configured",
-    owner   => 'heat-admin',
-    group   => 'heat-admin',
-    mode    => '644',
   }
 
 }

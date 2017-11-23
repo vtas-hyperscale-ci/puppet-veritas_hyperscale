@@ -130,9 +130,9 @@ class veritas_hyperscale::db::mysql (
     }
   }
 
-  class {'veritas_hyperscale::db::schema' :
-    user     => $user,
-    password => $password,
-    dbname   => $dbname,
-  }
+#  class {'veritas_hyperscale::db::schema' :
+#    user     => $user,
+#    password => $password,
+#    dbname   => $dbname,
+#  }
 }

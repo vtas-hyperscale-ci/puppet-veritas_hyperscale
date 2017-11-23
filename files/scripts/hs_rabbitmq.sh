@@ -8,15 +8,9 @@
 
 PASS=$1
 
-IDEMPOTENT="/var/tmp/vrts/.hs_mq_configured"
-if [ -f $IDEMPOTENT ]
-then
-    exit 0
-fi
-
 CMD_RABBITMQA_PLUGIN=/usr/lib/rabbitmq/bin/rabbitmq-plugins
 CMD_RABBITMQCTL=/usr/sbin/rabbitmqctl
-CMD_RABBITMQADMIN=/etc/puppet/modules/veritas_hyperscale/files/scripts/rabbitmqadmin
+CMD_RABBITMQADMIN="python /etc/puppet/modules/veritas_hyperscale/files/scripts/rabbitmqadmin"
 
 # Add user tags
 $CMD_RABBITMQCTL set_user_tags hyperscale management
@@ -38,5 +32,3 @@ $CMD_RABBITMQADMIN declare exchange name=hyperscale-recv type=direct durable=tru
 $CMD_RABBITMQADMIN declare exchange name=hyperscale-storage type=direct durable=true -u hyperscale -p $PASS
 $CMD_RABBITMQADMIN declare exchange name=hyperscale-compute-hy type=direct durable=true -u hyperscale -p $PASS
 $CMD_RABBITMQADMIN declare exchange name=hyperscale-datanode-hypervisor type=direct durable=true -u hyperscale -p $PASS
-
-touch $IDEMPOTENT
