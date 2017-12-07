@@ -21,19 +21,15 @@ class  veritas_hyperscale::hs_rabbitmq (
   rabbitmq_user { 'hyperscale':
     admin    => true,
     password => $password,
-    provider => 'rabbitmqctl',
   }
 
   rabbitmq_user_permissions { "hyperscale@/":
     configure_permission => '.*',
     write_permission     => '.*',
     read_permission      => '.*',
-    provider             => 'rabbitmqctl',
   }
 
-  rabbitmq_vhost { '/':
-    provider => 'rabbitmqctl',
-  }
+  rabbitmq_vhost { '/': }
 
 # === Master
 #  ::openstacklib::messaging::rabbitmq {'vrts_hyperscale':
