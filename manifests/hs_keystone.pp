@@ -36,17 +36,6 @@ class  veritas_hyperscale::hs_keystone (
       roles  => ['admin'],
     }
 
-    keystone_user { '_proxy_':
-      ensure   => present,
-      enabled  => true,
-      password => $password,
-    }
-
-    keystone_user_role { '_proxy_@admin':
-      ensure => present,
-      roles  => ['admin'],
-    }
-
     keystone_role { 'infra_admin':
       ensure => present,
     }
@@ -69,7 +58,7 @@ class  veritas_hyperscale::hs_keystone (
     keystone_endpoint { 'hyperscale':
       ensure       => present,
       type         => 'infrastructure',
-      region       => 'RegionOne',
+      region       => 'regionOne',
       public_url   => "http://$keystone_ip:8753/v1/%(tenant_id)s",
       admin_url    => "http://$keystone_ip:8753/v1/%(tenant_id)s",
       internal_url => "http://$keystone_ip:8753/v1/%(tenant_id)s",
