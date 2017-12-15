@@ -60,7 +60,7 @@ class veritas_hyperscale::config_dumper (
 
   $telemetry = hiera('vrts_config_param1', '')
   if $telemetry == '' {
-    $telemetry_state = 'n'
+    $telemetry_state = 'y'
   } else {
     $telemetry_state = $telemetry
   }
