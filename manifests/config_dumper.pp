@@ -73,7 +73,7 @@ class veritas_hyperscale::config_dumper (
     path        => '/usr/bin:/usr/sbin:/bin',
     environment => ["_ZK_IP=$ctrl_ip"],
     creates     => "/var/tmp/vrts/.hs_openstack_dump",
-    command     => "/opt/VRTSofcore/bin/ofexec --operation controller_conf_tripleo --run --params \"controller_ip=$ctrl_ip;mgmt_ip=$ctrl_ip;mysql_host=$mysql_ip;glance_host=$glance_ip;rabbit_host=$rabbit_ip;keystone_host=$ks_ip;openstack_passwd=$admin_passwd;mysql_user=hyperscale;mysql_hyperscale_password=$mysql_hyperscale_password;mysql_db=HyperScale;auth_url=$hs_url;telemetry_state=$telemetry_statei;mgmt_ip_list=$mgmt_ip_list\"",
+    command     => "/opt/VRTSofcore/bin/ofexec --operation controller_conf_tripleo --run --params \"controller_ip=$ctrl_ip;mgmt_ip=$ctrl_ip;mysql_host=$mysql_ip;glance_host=$glance_ip;rabbit_host=$rabbit_ip;keystone_host=$ks_ip;openstack_passwd=$admin_passwd;mysql_user=hyperscale;mysql_hyperscale_password=$mysql_hyperscale_password;mysql_db=HyperScale;auth_url=$hs_url;telemetry_state=$telemetry_state;mgmt_ip_list=$mgmt_ip_list\"",
   } -> file {"/var/tmp/vrts/.hs_openstack_dump":
     ensure => 'present',
     path   => "/var/tmp/vrts/.hs_openstack_dump",
