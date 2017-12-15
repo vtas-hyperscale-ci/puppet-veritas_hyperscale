@@ -18,9 +18,15 @@ class veritas_hyperscale::rabbitmq_save_conf (
     fail("Rabbitmq port not set.")
   }
 
-  $ctrl_ip = hiera('vrts_ctrl_mgmt_ip', '')
-  if $ctrl_ip == '' {
-    fail("vrts_ctrl_mgmt_ip IP not set.")
+  $mgmt_ips = hiera('vrts_config_param1', '')
+  if $mgmt_ips == '' {
+    $ctrl_ip = hiera('vrts_ctrl_mgmt_ip', '')
+    if $ctrl_ip == '' {
+      fail("vrts_ctrl_mgmt_ip IP not set.")
+    }
+  } else {
+    $ip_array = split($mgmt_ips, ',')
+    $ctrl_ip = join($ip_array, ';')
   }
 
   $rabbit_pass = hiera('vrts_rabbitmq_pass', 'elacsrepyh')

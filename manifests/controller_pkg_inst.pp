@@ -44,7 +44,7 @@ class veritas_hyperscale::controller_pkg_inst (
     mode    => '644',
   }
 
-  if $step >=4 {
+  if $step >4 {
     include veritas_hyperscale::controller_save_conf
   }
 }
